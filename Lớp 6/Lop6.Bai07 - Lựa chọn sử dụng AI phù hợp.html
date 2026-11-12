@@ -1,0 +1,158 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mô phỏng – Lớp 6 Bài 7: Lựa chọn sử dụng AI phù hợp</title>
+<style>
+:root{--o:#ff8a2b;--od:#d35400;--g:#2ecc71;--y:#f6c744;--r:#ef5350;--ink:#1f2d3d;--bg:#fff7ec}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 0,#ffe9cc,transparent 40%),radial-gradient(circle at 100% 20%,#dff3ff,transparent 40%),var(--bg);min-height:100vh}
+header{display:flex;align-items:center;gap:14px;padding:12px 20px;background:linear-gradient(90deg,#ff8a2b,#ff6a3d);color:#fff;box-shadow:0 3px 10px #0002}
+header h1{margin:0;font-size:20px;line-height:1.2}header small{opacity:.9}
+.hud{margin-left:auto;display:flex;gap:10px;align-items:center}.pill{background:#fff3;border-radius:20px;padding:5px 12px;font-weight:700;font-size:14px}
+.ibtn{background:#fff3;border:0;color:#fff;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:16px}
+.map{display:flex;padding:12px 20px;max-width:1000px;margin:0 auto;align-items:center}
+.node{flex:1;text-align:center;font-size:12px;cursor:pointer;position:relative}
+.node i{display:flex;width:38px;height:38px;border-radius:50%;margin:0 auto 4px;background:#fff;border:3px solid #cbd5e1;align-items:center;justify-content:center;font-style:normal;font-weight:800;color:#94a3b8;transition:.3s;position:relative;z-index:1}
+.node.on i{background:var(--o);border-color:var(--od);color:#fff;transform:scale(1.15)}.node.done i{background:var(--g);border-color:#1e9e55;color:#fff}
+.node:not(:last-child)::after{content:"";position:absolute;top:18px;left:calc(50% + 24px);width:calc(100% - 48px);height:4px;background:#d9e2ec}
+main{max-width:1000px;margin:0 auto;padding:0 20px 70px}
+.card{background:#fff;border-radius:18px;padding:20px;margin:12px 0;box-shadow:0 6px 18px #0001;animation:pop .35s}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{margin:0 0 4px;color:var(--od)}p.lead{margin:0 0 12px;color:#52606d}
+.btn{background:var(--o);color:#fff;border:0;padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;font-size:15px;box-shadow:0 3px 0 var(--od);transition:.1s}.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.g{background:var(--g);box-shadow:0 3px 0 #1e9e55}.btn.w{background:#fff;color:var(--od);border:2px solid var(--o);box-shadow:none}.btn:disabled{opacity:.45;cursor:not-allowed}
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.stage{grid-template-columns:1fr}}
+.phone{background:#1f2d3d;border-radius:26px;padding:12px;max-width:380px;margin:auto;width:100%}
+.screen{background:#eef2f7;border-radius:16px;min-height:330px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.appbar{background:#fff;border-radius:10px;padding:6px 10px;font-weight:700;font-size:13px;display:flex;justify-content:space-between}
+.msg{max-width:88%;padding:8px 11px;border-radius:14px;font-size:14px;animation:pop .3s}.me{align-self:flex-end;background:#cfe8ff}.ai{align-self:flex-start;background:#fff;border:1px solid #dbe3ee}.ai::before{content:"🤖 "}
+.typing{align-self:flex-start;color:#7b8794;font-size:13px}
+.char{text-align:center}.char svg{width:130px;height:130px}.bubble{background:#fff8e1;border:2px solid var(--y);border-radius:14px;padding:10px;font-size:14px;margin-bottom:10px}
+.choices{display:grid;gap:8px;margin:10px 0}.choice{background:#fff;border:2px solid #d9e2ec;border-radius:12px;padding:10px 12px;text-align:left;font-size:14px;cursor:pointer;transition:.15s}.choice:hover:not(:disabled){border-color:var(--o);transform:translateX(3px)}.choice.sel{border-color:var(--o);background:#fff1e0}.choice:disabled{opacity:.5}
+.meter{margin:6px 0;font-size:13px}.bar{height:14px;background:#e8edf3;border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;width:50%;transition:width .8s;border-radius:8px}
+.m1 i{background:var(--g)}.m2 i{background:var(--r)}.m3 i{background:#4aa3ff}
+.fb{border-radius:12px;padding:10px 14px;margin-top:10px;font-size:14px;animation:pop .3s}.fb.ok{background:#e3f9ec;border:2px solid var(--g)}.fb.no{background:#fdeceb;border:2px solid var(--r)}.fb.info{background:#e8f3ff;border:2px solid #8cc4ff}
+.light{display:flex;gap:8px;justify-content:center;background:#2b3a4a;border-radius:30px;padding:10px;width:max-content;margin:6px auto}.light b{width:34px;height:34px;border-radius:50%;background:#46566a;transition:.3s}.light b.on.g{background:var(--g);box-shadow:0 0 16px var(--g)}.light b.on.y{background:var(--y);box-shadow:0 0 16px var(--y)}.light b.on.r{background:var(--r);box-shadow:0 0 16px var(--r)}
+.qrow{display:flex;gap:8px;align-items:center;margin:8px 0;padding:8px;border-radius:10px;background:#f6f8fb;font-size:14px}.qrow span{flex:1}
+.yn button{border:0;border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:700;margin-left:4px;background:#e1e8f0}.yn button.on{background:var(--o);color:#fff}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}@media(max-width:760px){.board{grid-template-columns:1fr}}
+.zone{min-height:200px;border-radius:16px;padding:10px;border:3px dashed;transition:.2s}.zone h4{margin:0 0 8px;text-align:center}.z0{border-color:var(--g);background:#eefcf3}.z1{border-color:var(--y);background:#fff9e6}.z2{border-color:var(--r);background:#fff0ef}.zone.over{transform:scale(1.02);box-shadow:0 0 0 4px #ff8a2b55}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:80px;padding:10px;background:#f1f5f9;border-radius:14px;margin-bottom:12px}
+.tcard{background:#fff;border:2px solid #cbd5e1;border-radius:12px;padding:8px 10px;font-size:13px;cursor:grab;box-shadow:0 2px 0 #cbd5e1;user-select:none}.pool .tcard{flex:1 1 230px}.tcard.sel{border-color:var(--o);box-shadow:0 0 0 3px #ff8a2b66}.tcard.ok{border-color:var(--g);background:#f1fff6}.tcard.no{border-color:var(--r);animation:shake .4s}
+.zone .tcard{margin-bottom:6px}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+select,textarea{width:100%;font:inherit;padding:8px;border:2px solid #d9e2ec;border-radius:10px;margin-top:6px}textarea{min-height:60px}
+.cmt{background:linear-gradient(135deg,#fff8e1,#ffe0b2);border:3px solid var(--o);border-radius:18px;padding:16px;max-width:520px;margin:12px auto;text-align:center}
+.badge{display:inline-block;font-size:34px;margin:4px;filter:grayscale(1);opacity:.4;transition:.5s}.badge.on{filter:none;opacity:1;transform:scale(1.15)}
+.note{background:#fff0ef;border-left:5px solid var(--r);border-radius:8px;padding:8px 12px;font-size:13px;margin-top:14px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media print{header,.map,.btn,#confetti{display:none}.card{box-shadow:none}}
+</style></head><body>
+<header><div style="font-size:30px">🧭</div><div><h1>Bài 7. Lựa chọn sử dụng AI phù hợp – Lớp 6</h1><small>Phần mềm mô phỏng • Giáo dục AI • Chạy ngoại tuyến, không dùng AI thật, không thu thập dữ liệu</small></div>
+<div class="hud"><span class="pill" id="score">⭐ 0</span><button class="ibtn" id="snd" title="Âm thanh">🔊</button></div></header>
+<div class="map" id="map"></div><main id="main"></main><canvas id="confetti"></canvas>
+<script>
+const GR=['Nên dùng','Cần cân nhắc','Không nên dùng'],ZC=['z0','z1','z2'],ZI=['🟢','🟡','🔴'];
+const Q=['Mục đích: em có đang cần tự luyện kĩ năng này không?','Có cách khác đơn giản, an toàn hơn không?','Em (hoặc người lớn) vẫn là người quyết định và kiểm tra lại kết quả không?'];
+const KIDS=[
+ {n:'Minh',c:'#4aa3ff',task:'Bài văn “Tả người thân”',opts:[
+  {t:'Nhờ AI viết hộ rồi chép nguyên vào vở nộp như bài tự viết',ch:[-25,60,-30],ai:['Viết giúp mình bài văn “Tả người thân”.','Đây là bài văn 250 chữ về người thân… (AI viết sẵn, có thể sai chi tiết về gia đình em).'],v:'bad',fb:'Minh mất cơ hội luyện viết; bài có thể sai chi tiết và thầy cô hiểu sai về khả năng của Minh.'},
+  {t:'Tự viết trước, rồi nhờ AI chỉ chỗ sai chính tả để tự sửa',ch:[20,5,10],ai:['Mình viết xong rồi, bạn chỉ lỗi chính tả giúp mình.','Có 3 chỗ cần xem lại: “sáng tạo”, “chăm chỉ”, “dịu dàng”. Bạn tự sửa nhé!'],v:'good',fb:'Em vẫn tự làm, AI chỉ hỗ trợ kiểm tra – hợp lí.'},
+  {t:'Tự viết hoàn toàn, không dùng AI',ch:[30,0,15],ai:null,v:'good',fb:'Rất tốt cho việc luyện viết. Không dùng AI cũng là một lựa chọn.'}]},
+ {n:'Lan',c:'#f06292',task:'Luyện phát âm “thirteen” / “thirty”',opts:[
+  {t:'Dùng ứng dụng AI nghe đọc, chỉ chỗ nhấn sai; Lan tự đọc lại đến khi đúng',ch:[25,0,15],ai:['Lan đọc: “thirty”…','Chú ý nhấn âm đầu ở “thirty”, nhấn âm sau ở “thirteen”. Thử lại nhé!'],v:'good',fb:'AI chỉ ra lỗi, Lan vẫn tự luyện – hợp lí.'},
+  {t:'Nhờ AI đọc hộ rồi nộp bản ghi âm của AI như của mình',ch:[-25,50,-35],ai:['Đọc giúp mình rồi mình nộp.','Đã tạo bản ghi âm giọng chuẩn.'],v:'bad',fb:'Lan không luyện được và nộp sản phẩm không phải của mình.'}]},
+ {n:'Tuấn',c:'#66bb6a',task:'Luyện tính nhẩm theo bài cô giao',opts:[
+  {t:'Hỏi chatbot “25 × 4 bằng mấy?” rồi chép đáp số',ch:[-25,40,-20],ai:['25 × 4 bằng mấy?','Bằng 100.'],v:'bad',fb:'Mục đích là luyện tính nhẩm nên Tuấn cần tự làm.'},
+  {t:'Tự nhẩm, sau đó nhờ chatbot kiểm tra lại đáp số',ch:[20,5,10],ai:['Mình nhẩm ra 100, đúng không?','Đúng rồi! 25 × 4 = 100.'],v:'good',fb:'Tự làm trước, AI chỉ kiểm tra – hợp lí.'}]}];
+const SIT=[{t:'Hà luyện phát âm tiếng Anh với ứng dụng AI 10 phút mỗi tối.',g:0,why:'AI chỉ ra lỗi, Hà vẫn tự luyện nói.'},
+{t:'Gia đình Khôi lần đầu đến nhà văn hoá mới; bố dùng tính năng gợi ý lộ trình theo giao thông trên ứng dụng bản đồ.',g:0,why:'Người lớn quan sát biển báo và quyết định lối đi; AI chỉ gợi ý.'},
+{t:'Phương nhờ AI làm hộ 10 bài toán về nhà rồi chép vào vở.',g:2,why:'Bài tập về nhà để em tự luyện; AI làm hộ khiến em mất cơ hội luyện tập, bài sai không phát hiện, thầy cô hiểu sai về khả năng của em.'},
+{t:'Quân hỏi trợ lí AI “Hôm nay thứ mấy?” trong khi tờ lịch treo ngay trên tường.',g:2,why:'Nhìn tờ lịch đơn giản và an toàn hơn.'}];
+const CARDS=[{t:'Nhờ trợ lí AI giải hộ 10 bài toán về nhà rồi chép vào vở để nộp.',g:[2],why:'Bài tập để em tự luyện. Cách thay thế: tự làm, hỏi thầy cô/bạn khi chưa hiểu, làm xong có thể kiểm tra lại.'},
+{t:'Lần đầu đi cùng bố mẹ đến bảo tàng, bố mẹ dùng tính năng gợi ý lộ trình theo giao thông trên ứng dụng bản đồ.',g:[0],why:'AI hỗ trợ, người lớn quyết định.'},
+{t:'Nhờ trợ lí AI chọn giúp nên mua đôi giày nào bằng tiền mừng tuổi.',g:[1],why:'Tiêu tiền là việc quan trọng, cần hỏi bố mẹ cùng quyết định; AI chỉ gợi ý để tham khảo.'},
+{t:'Tự viết xong bài văn, sau đó nhờ AI chỉ ra lỗi chính tả rồi tự sửa.',g:[0],why:'Em vẫn tự làm, AI chỉ hỗ trợ kiểm tra.'},
+{t:'Nhờ ứng dụng AI đọc mẫu một đoạn thơ, sau đó em tự đọc theo.',g:[0],why:'AI hỗ trợ luyện đọc, em vẫn tự luyện.'},
+{t:'Nhờ AI gợi ý 5 ý tưởng trang trí góc lớp, sau đó cả lớp bàn bạc và chọn.',g:[1,0],why:'Tuỳ mục đích: nếu nhiệm vụ rèn ý tưởng của lớp thì cả lớp tự nêu ý tưởng trước rồi mới tham khảo. Chấp nhận “Nên dùng” nếu cả lớp vẫn quyết định.'},
+{t:'Nhờ AI gợi ý dàn ý cho bài văn, sau đó em tự viết bài.',g:[1,0],why:'Nếu bài nhằm luyện lập dàn ý thì em tự làm; nếu thầy cô cho phép thì em tự viết và nói rõ phần AI gợi ý.'}];
+const P2=[{t:'Em tự làm xong bài toán rồi nhờ trợ lí AI kiểm tra lại đáp số.',g:[0],why:'Em tự làm trước, AI chỉ kiểm tra; kết quả khác nhau thì hỏi thầy cô.'},
+{t:'Em nhờ trợ lí AI viết hộ đoạn văn giới thiệu về quê em rồi chép vào vở để nộp.',g:[2],why:'Em mất cơ hội luyện viết, bài sai không phát hiện, người đọc hiểu sai về khả năng của em.'},
+{t:'Nhóm em nhờ AI gợi ý ba ý tưởng cho bài thuyết trình, cả nhóm chọn và tự viết.',g:[0,1],why:'Được dùng nếu thầy cô cho phép, nhóm tự chọn, tự viết và nói rõ phần AI gợi ý.'}];
+let S,step=0,MUTE=false;const NAMES=['Ba bạn, ba cách','Ba câu hỏi','Xếp thẻ','Em tự chọn','Kết quả'];
+function fresh(){S={pts:0,done:[0,0,0,0,0],kid:0,pick:{},m:[50,20,50],h2:0,q:SIT.map(()=>[null,null,null]),h2ok:SIT.map(()=>null),b:{},rs:{},sel:null,chk3:0,p2:P2.map(()=>({g:null,r:''}))}}
+fresh();
+const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+function add(p){S.pts+=p;$('#score').textContent='⭐ '+S.pts}
+let AC;function beep(f,d=.12,t='sine'){if(MUTE)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d)}catch(e){}}
+const good=()=>{beep(660);setTimeout(()=>beep(880),90)},bad=()=>beep(180,.25,'sawtooth');
+$('#snd').onclick=()=>{MUTE=!MUTE;$('#snd').textContent=MUTE?'🔇':'🔊'};
+function confetti(){const c=$('#confetti');c.width=innerWidth;c.height=innerHeight;const x=c.getContext('2d');const P=[...Array(120)].map(()=>({x:Math.random()*c.width,y:-20-Math.random()*200,v:2+Math.random()*4,s:5+Math.random()*7,c:['#ff8a2b','#2ecc71','#4aa3ff','#f6c744','#ef5350'][Math.random()*5|0],r:Math.random()*6}));let f=0;(function a(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.x+=Math.sin(p.y/30);p.r+=.1;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});if(++f<150)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})()}
+const av=(c,n)=>`<svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="22" fill="#ffd9b3"/><path d="M28 36q4-24 22-22t22 22q-10-12-44 0z" fill="#3b2a20"/><rect x="26" y="62" width="48" height="34" rx="16" fill="${c}"/><circle cx="42" cy="40" r="3" fill="#222"/><circle cx="58" cy="40" r="3" fill="#222"/><path d="M42 50q8 7 16 0" stroke="#b5533c" stroke-width="3" fill="none" stroke-linecap="round"/><text x="50" y="86" font-size="11" font-weight="700" text-anchor="middle" fill="#fff">${n}</text></svg>`;
+function nav(){const m=$('#map');m.innerHTML='';NAMES.forEach((n,i)=>{const d=E('div','node'+(i==step?' on':'')+(S.done[i]?' done':''),`<i>${S.done[i]?'✓':i+1}</i>${n}`);d.onclick=()=>go(i);m.appendChild(d)})}
+function go(i){step=i;nav();const m=$('#main');m.innerHTML='';[h1,h2,h3,h4,kq][i](m)}
+function toTop(){scrollTo({top:0})}
+const nextBtn=(host,i,lab='Tiếp tục ▶')=>{const b=E('button','btn g',lab);b.style.marginTop='14px';b.onclick=()=>{S.done[i]=1;go(i+1);toTop()};host.appendChild(b)};
+const AIN=m=>m.appendChild(E('div','note','<b>Điểm kiểm soát AI:</b> Con người quyết định cuối cùng và chịu trách nhiệm về bài mình nộp. Chỉ dùng tình huống giả định; không nhập tên thật, địa chỉ, số điện thoại. Phần mềm này không kết nối AI thật.'));
+/* HĐ1 */
+function h1(m){const k=KIDS[S.kid],c=E('div','card');
+ c.innerHTML=`<h2>Hoạt động 1 – Ba bạn, ba cách dùng AI</h2><p class="lead">Chọn cách làm cho từng bạn rồi xem chuyện gì xảy ra với <b>kĩ năng tự luyện</b>, <b>nguy cơ bài sai</b> và <b>sự tin tưởng của thầy cô</b>.</p><p class="lead"><b>Câu hỏi then chốt (1):</b> Bạn nào dùng AI hợp lí, bạn nào không nên? Vì sao? <i>Gợi ý nếu lúng túng: “Sau khi dùng AI, bạn ấy giỏi thêm điều gì?” – Lan đọc đúng hơn; Minh, Tuấn không giỏi thêm kĩ năng nào. Hỏi thêm: “Bằng chứng nào khiến em tin?”</i></p>`;
+ const tabs=E('div');tabs.style.cssText='display:flex;gap:8px;margin-bottom:10px';KIDS.forEach((x,i)=>{const b=E('button','btn '+(i==S.kid?'':'w'),x.n+(S.rs['k'+i]?' ✓':''));b.onclick=()=>{S.kid=i;S.m=[50,20,50];go(0)};tabs.appendChild(b)});c.appendChild(tabs);
+ const st=E('div','stage'),L=E('div');L.innerHTML=`<div class="char">${av(k.c,k.n)}</div><div class="bubble"><b>${k.n}</b> đang làm: <b>${k.task}</b>. ${k.n} nên làm thế nào?</div>`;
+ const ch=E('div','choices');k.opts.forEach((o,i)=>{const b=E('button','choice'+(S.pick[S.kid]===i?' sel':''),o.t);b.onclick=()=>{S.pick[S.kid]=i;S.anim=1;go(0)};ch.appendChild(b)});L.appendChild(ch);
+ [['Kĩ năng tự luyện của '+k.n,'m1',0],['Nguy cơ bài sai / không phát hiện','m2',1],['Sự tin tưởng của thầy cô','m3',2]].forEach(([n,cl,i])=>L.appendChild(E('div','meter '+cl,`${n}<div class="bar"><i style="width:${S.m[i]}%"></i></div>`)));
+ const R=E('div');R.innerHTML=`<div class="phone"><div class="screen" id="scr"><div class="appbar"><span>💬 Trợ lí AI (mô phỏng)</span><span>●●●</span></div><div class="msg ai" style="opacity:.7">Xin chào! Bạn muốn mình giúp gì? (Hãy chọn cách làm bên trái)</div></div></div>`;
+ st.append(L,R);c.appendChild(st);m.appendChild(c);
+ if(S.pick[S.kid]!=null){const an=S.anim;S.anim=0;replay(S.pick[S.kid],!an)}
+ if(KIDS.every((x,i)=>S.rs['k'+i]))nextBtn(c,0,'Sang Hoạt động 2 ▶');
+ AIN(m)}
+function replay(i,quiet){const k=KIDS[S.kid],o=k.opts[i],scr=$('#scr'),card=$('.card');
+ if(o.ai){scr.appendChild(E('div','msg me',o.ai[0]));if(quiet)scr.appendChild(E('div','msg ai',o.ai[1]));else{const t=E('div','typing','AI đang trả lời…');scr.appendChild(t);setTimeout(()=>{t.remove();scr.appendChild(E('div','msg ai',o.ai[1]))},900)}}
+ else scr.appendChild(E('div','msg me','(Em không mở ứng dụng AI, tự làm bài.)'));
+ const apply=()=>{S.m=[Math.max(0,Math.min(100,50+o.ch[0]*2)),Math.max(0,Math.min(100,20+o.ch[1])),Math.max(0,Math.min(100,50+o.ch[2]*2))];document.querySelectorAll('.meter .bar i').forEach((b,j)=>b.style.width=S.m[j]+'%');
+  card.appendChild(E('div','fb '+(o.v=='good'?'ok':'no'),(o.v=='good'?'✅ Hợp lí. ':'⚠️ Chưa nên. ')+o.fb));
+  if(!quiet&&!S.rs['k'+S.kid]){S.rs['k'+S.kid]=1;add(o.v=='good'?5:2);o.v=='good'?good():bad();nav();if(KIDS.every((x,j)=>S.rs['k'+j])&&!$('.btn.g'))nextBtn(card,0,'Sang Hoạt động 2 ▶')}};
+ quiet?apply():setTimeout(apply,o.ai?1000:100)}
+/* HĐ2 */
+function h2(m){const i=S.h2,x=SIT[i],q=S.q[i];const c=E('div','card');
+ c.innerHTML=`<h2>Hoạt động 2 – Máy quét “Ba câu hỏi”</h2><p class="lead">Tình huống ${i+1}/4. Trả lời Có/Không cho ba câu hỏi, đèn tín hiệu sẽ gợi ý nhóm – rồi em quyết định nhóm cuối cùng.</p>`;
+ c.appendChild(E('div','bubble','<b>Tình huống:</b> '+x.t));
+ q.forEach((v,j)=>{const r=E('div','qrow',`<span><b>(${j+1})</b> ${Q[j]}</span>`);const yn=E('div','yn');[['Có',1],['Không',0]].forEach(([l,val])=>{const b=E('button',v===val?'on':'',l);b.onclick=()=>{q[j]=val;go(1)};yn.appendChild(b)});r.appendChild(yn);c.appendChild(r)});
+ const full=q.every(v=>v!==null);let col=null;
+ if(full){col=(q[1]===1||(q[0]===1&&q[2]===0))?2:((q[0]===0&&q[2]===1)||(q[0]===1&&q[2]===1)?0:1)}
+ c.appendChild(E('div','light',`<b class="g ${full&&col===0?'on':''}"></b><b class="y ${full&&col===1?'on':''}"></b><b class="r ${full&&col===2?'on':''}"></b>`));
+ const r=E('div');r.style.textAlign='center';r.textContent=full?'Đèn gợi ý: '+GR[col]+'. Em chọn nhóm cuối cùng:':'Hãy trả lời đủ ba câu hỏi để đèn sáng.';c.appendChild(r);
+ const ch=E('div','choices');GR.forEach((g,gi)=>{const b=E('button','choice',ZI[gi]+' '+g);b.disabled=!full||S.h2ok[i]!==null;b.onclick=()=>{const ok=gi===x.g;S.h2ok[i]=ok?1:0;if(ok){add(5);good()}else{add(1);bad()}go(1)};ch.appendChild(b)});c.appendChild(ch);
+ if(S.h2ok[i]!==null){c.appendChild(E('div','fb '+(S.h2ok[i]?'ok':'no'),(S.h2ok[i]?'✅ Đúng! ':'❌ Đáp án: <b>'+GR[x.g]+'</b>. ')+x.why));
+  const b=E('button','btn g',i<3?'Tình huống tiếp ▶':'Hoàn thành HĐ2 ▶');b.style.marginTop='10px';b.onclick=()=>{if(i<3){S.h2++;go(1)}else{S.done[1]=1;go(2);toTop()}};c.appendChild(b)}
+ m.appendChild(c);AIN(m)}
+/* HĐ3 */
+function h3(m){const c=E('div','card');c.innerHTML=`<h2>Hoạt động 3 – Xếp bảy thẻ tình huống</h2><p class="lead">Kéo thẻ vào đúng cột (trên điện thoại: chạm thẻ rồi chạm cột). Nhiệm vụ mở: thẻ 6, 7 có thể xếp “Nên dùng” hoặc “Cần cân nhắc” nếu có lí do.</p>`;
+ const pool=E('div','pool');pool.ondragover=e=>e.preventDefault();pool.ondrop=e=>{S.b[+e.dataTransfer.getData('t')]=null;S.chk3=0;go(2)};
+ const mk=i=>{const x=CARDS[i];const t=E('div','tcard'+(S.sel===i?' sel':'')+(S.chk3&&S.b[i]!=null?(x.g.includes(S.b[i])?' ok':' no'):''),`<b>Thẻ ${i+1}.</b> ${x.t}`);t.draggable=true;t.ondragstart=e=>e.dataTransfer.setData('t',i);t.onclick=e=>{e.stopPropagation();S.sel=S.sel===i?null:i;go(2)};return t};
+ CARDS.forEach((x,i)=>{if(S.b[i]==null)pool.appendChild(mk(i))});if(!pool.children.length)pool.innerHTML='<i>Đã xếp hết thẻ 🎉</i>';
+ pool.onclick=()=>{if(S.sel!=null){S.b[S.sel]=null;S.sel=null;go(2)}};c.appendChild(pool);
+ const bd=E('div','board');GR.forEach((g,gi)=>{const z=E('div','zone '+ZC[gi],`<h4>${ZI[gi]} ${g}</h4>`);
+  const put=i=>{S.b[i]=gi;S.sel=null;S.chk3=0;go(2)};z.ondragover=e=>{e.preventDefault();z.classList.add('over')};z.ondragleave=()=>z.classList.remove('over');z.ondrop=e=>{e.preventDefault();put(+e.dataTransfer.getData('t'))};z.onclick=()=>{if(S.sel!=null)put(S.sel)};
+  CARDS.forEach((x,i)=>{if(S.b[i]===gi)z.appendChild(mk(i))});bd.appendChild(z)});c.appendChild(bd);
+ const n=Object.values(S.b).filter(v=>v!=null).length;const b=E('button','btn','Kiểm tra cách xếp ('+n+'/7)');b.disabled=n<7;b.style.marginTop='12px';
+ b.onclick=()=>{S.chk3=1;const ok=CARDS.filter((x,i)=>x.g.includes(S.b[i])).length;if(!S.rs.h3){S.rs.h3=1;add(ok*3)}if(ok>=5){good();confetti();S.done[2]=1}else bad();go(2)};c.appendChild(b);
+ if(S.chk3){const ok=CARDS.filter((x,i)=>x.g.includes(S.b[i])).length;c.appendChild(E('div','fb '+(ok>=5?'ok':'info'),`<b>${ok}/7 thẻ hợp lí.</b> ${ok>=5?'Làm tốt lắm!':'Hãy xem lại các thẻ viền đỏ rồi xếp lại.'}<br>`+CARDS.map((x,i)=>`${x.g.includes(S.b[i])?'✔':'✘'} Thẻ ${i+1} → ${GR[x.g[0]]}${x.g.length>1?' / '+GR[x.g[1]]:''}: ${x.why}`).join('<br>')));if(ok>=5){const nf=E('div','cmt','<h3 style="margin:0;color:var(--od)">Phiếu học tập số 1 – Phần B: cột “KHÔNG NÊN DÙNG (và cách làm thay thế)”</h3><p>Thẻ …… Lí do: …… Cách làm thay thế: ……</p><textarea placeholder="Thẻ … Lí do: … Cách làm thay thế: …"></textarea><textarea placeholder="Thẻ … Lí do: … Cách làm thay thế: …"></textarea><p><b>Nhóm xong sớm:</b> nghĩ thêm một tình huống “cần cân nhắc” và nêu lí do (chấp nhận tình huống có lí do gắn với mục đích học tập).</p><textarea placeholder="Tình huống “cần cân nhắc” của nhóm em…"></textarea><p><b>Câu hỏi then chốt (1):</b> Điều gì có thể làm cách xếp thẻ 6, thẻ 7 thay đổi? <i>Mục đích học tập của nhiệm vụ và việc thầy cô có cho phép tham khảo gợi ý hay không.</i></p>');c.appendChild(nf)}
+ if(ok>=5)nextBtn(c,2,'Sang Hoạt động 4 ▶')}
+ m.appendChild(c);AIN(m)}
+/* HĐ4 */
+function h4(m){const c=E('div','card');c.innerHTML=`<h2>Hoạt động 4 – Em tự chọn & Thẻ cam kết</h2><p class="lead">Phần A (bắt buộc): chọn nhóm và ghi một lí do. Em tự làm bằng ý của mình.</p>`;
+ P2.forEach((x,i)=>{const a=S.p2[i];const d=E('div');d.style.cssText='border-top:1px solid #eee;padding:10px 0';d.innerHTML=`<b>${'abc'[i]})</b> ${x.t}`;
+  const s=E('select');s.innerHTML='<option value="">– Chọn nhóm –</option>'+GR.map((g,j)=>`<option value="${j}" ${a.g===j?'selected':''}>${ZI[j]} ${g}</option>`).join('');s.onchange=()=>{a.g=s.value===''?null:+s.value};d.appendChild(s);
+  const t=E('textarea');t.placeholder='Lí do của em…';t.value=a.r;t.oninput=()=>a.r=t.value;d.appendChild(t);
+  if(S.rs['p'+i])d.appendChild(E('div','fb '+S.rs['p'+i][0],S.rs['p'+i][1]));c.appendChild(d)});
+ const b=E('button','btn','Chấm Phần A');b.onclick=()=>{let p=0;P2.forEach((x,i)=>{const a=S.p2[i],g=a.g!=null&&x.g.includes(a.g),r=a.r.trim().length>=8;S.rs['p'+i]=[g&&r?'ok':'no',(g?'✔ Nhóm phù hợp. ':'✘ Nhóm gợi ý: '+GR[x.g[0]]+'. ')+(r?'✔ Có lí do. ':'✘ Hãy viết lí do rõ hơn (từ 8 kí tự). ')+'<br><i>Gợi ý: '+x.why+'</i>'];if(g&&r)p+=4});if(!S.rs.h4){S.rs.h4=1;add(p)}if(p==12){good();confetti()}else bad();S.done[3]=p>=8?1:0;go(3)};c.appendChild(b);
+ const cm=E('div','cmt',`<h3 style="margin:0;color:var(--od)">🪪 Thẻ cam kết của em (Phần B – không bắt buộc)</h3><p>Trước khi dùng AI, em sẽ hỏi: <b>① Mục đích? ② Cách đơn giản, an toàn hơn? ③ Ai quyết định, kiểm tra lại?</b></p><textarea id="c1" placeholder="Một việc em sẽ tự làm, không nhờ AI…"></textarea><textarea id="c2" placeholder="Một việc em có thể dùng AI để học tốt hơn…"></textarea>`);
+ const dl=E('button','btn w','⬇ Lưu thẻ cam kết (PNG)');dl.style.marginTop='8px';dl.onclick=()=>{const cv=document.createElement('canvas');cv.width=900;cv.height=520;const x=cv.getContext('2d');x.fillStyle='#fff3dc';x.fillRect(0,0,900,520);x.strokeStyle='#ff8a2b';x.lineWidth=10;x.strokeRect(10,10,880,500);x.fillStyle='#d35400';x.font='bold 34px Arial';x.fillText('THẺ CAM KẾT – DÙNG AI CÓ TRÁCH NHIỆM',40,80);x.fillStyle='#1f2d3d';x.font='24px Arial';x.fillText('Trước khi dùng AI, em hỏi: 1) Mục đích? 2) Cách đơn giản, an toàn hơn?',40,140);x.fillText('3) Ai quyết định và kiểm tra lại kết quả?',40,175);
+  const w=(t,y)=>{const ws=t.split(' ');let l='';for(const a of ws){if(x.measureText(l+a).width>800){x.fillText(l,40,y);y+=32;l=''}l+=a+' '}x.fillText(l,40,y);return y+40};let y=240;x.font='bold 24px Arial';x.fillText('Em sẽ tự làm:',40,y);x.font='24px Arial';y=w($('#c1').value||'……',y+36);x.font='bold 24px Arial';x.fillText('Em có thể dùng AI để học tốt hơn:',40,y+10);x.font='24px Arial';w($('#c2').value||'……',y+46);const a=document.createElement('a');a.href=cv.toDataURL();a.download='the-cam-ket.png';a.click()};cm.appendChild(dl);c.appendChild(cm);
+ if(S.done[3])nextBtn(c,3,'Xem kết quả ▶');m.appendChild(c);AIN(m)}
+function kq(m){const c=E('div','card');const mx=15+20+21+12;const pc=Math.min(100,Math.round(S.pts/mx*100));
+ c.innerHTML=`<h2>🏁 Kết quả của em</h2><p class="lead">Tổng điểm: <b>${S.pts}</b> / ${mx} (${pc}%)</p><div class="bar m1" style="height:18px"><i style="width:${pc}%"></i></div>
+ <div style="text-align:center;margin:14px 0"><span class="badge ${S.done[0]?'on':''}" title="Nhà quan sát">🔍</span><span class="badge ${S.done[1]?'on':''}" title="Thám tử ba câu hỏi">🕵️</span><span class="badge ${S.done[2]?'on':''}" title="Bậc thầy xếp thẻ">🃏</span><span class="badge ${S.done[3]?'on':''}" title="Người dùng có trách nhiệm">🛡️</span></div>
+<h3>Mô tả mức đánh giá (Phiếu học tập số 2, Phần A)</h3><table style="width:100%;border-collapse:collapse;font-size:13.5px" border="1" cellpadding="6"><tr><th>Tiêu chí</th><th>Khá</th><th>Tốt</th></tr><tr><td>Đáp ứng nhiệm vụ, yêu cầu cần đạt (6.D1.1)</td><td>Lí do gắn với mục đích học tập hoặc cách làm đơn giản, an toàn hơn (ví dụ “đang luyện viết nên tự viết”).</td><td>Lí do rõ; nêu được hậu quả cụ thể khi để AI làm thay hoặc cách làm thay thế; nói được khi nào cách xếp có thể thay đổi.</td></tr><tr><td>An toàn, đạo đức, trách nhiệm</td><td>Tự nêu được hậu quả cụ thể: mất cơ hội luyện tập, bài sai không phát hiện, người khác hiểu sai về khả năng của em.</td><td>Phân biệt được dùng AI gợi ý có nói rõ với để AI làm thay (câu b, c); nêu được người quyết định hoặc người cần hỏi khi phân vân.</td></tr><tr><td>Hợp tác và trình bày (Phiếu học tập số 1, nhóm)</td><td>Trao đổi tích cực, lắng nghe và điều chỉnh khi có lí do hợp lí.</td><td>Dẫn dắt nhóm tranh luận thẻ khó, trình bày thuyết phục.</td></tr></table> <div class="fb info"><b>Ghi nhớ:</b> Trước khi dùng AI, em hỏi ba câu: <b>Mục đích?</b> – <b>Có cách đơn giản, an toàn hơn không?</b> – <b>Ai quyết định và kiểm tra lại?</b> Em vẫn tự làm, tự quyết.</div>`;
+ const b=E('button','btn','↺ Chơi lại');b.style.margin='14px 8px 0 0';b.onclick=()=>{fresh();$('#score').textContent='⭐ 0';go(0)};const p=E('button','btn w','🖨 In kết quả');p.onclick=()=>print();c.append(b,p);m.appendChild(c);if(pc>=70)confetti()}
+go(0);
+</script></body></html>
